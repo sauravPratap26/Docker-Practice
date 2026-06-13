@@ -1,0 +1,51 @@
+name: basic-app
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: trial-backend
+    restart: unless-stopped
+    command: npm run dev
+    environment:
+      - PORT=8000
+      - REDIS_URL=redis://redis-service:6379
+      - POSTGRES_URL=postgres://admin:password@postgres-service:5432/trialDB
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      redis-service:
+        condition: service_started
+      postgres-service:
+        condition: service_healthy
+
+  redis-service:
+    image: redis
+    restart: unless-stopped
+    container_name: trial-redis
+    volumes:
+      - trial-redis:/data
+
+  postgres-service:
+    image: postgres:18
+    restart: unless-stopped
+    container_name: trial-postgres
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=trialDB
+    volumes:
+      - trial-postgres:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d trialDB"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  trial-postgres:
+  trial-redis:
