@@ -2,7 +2,7 @@ name: basic-app-prod
 
 services:
   backend:
-    image: saurav269/basic-app:v1.1
+    image: saurav269/basic-app:latest
     restart: unless-stopped
     deploy:
       replicas: 3
