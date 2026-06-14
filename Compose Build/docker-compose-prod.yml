@@ -4,6 +4,8 @@ services:
   backend:
     image: saurav269/basic-app:v1.0
     restart: unless-stopped
+    deploy:
+      replicas: 3
     command: npm start
     environment:
       - PORT=8000
