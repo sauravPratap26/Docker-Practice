@@ -5,8 +5,7 @@ const { Client: PgClient } = require("pg");
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 const REDIS_URL = process.env.REDIS_URL;
-const POSTGRES_URL =
-  process.env.POSTGRES_URL;
+const POSTGRES_URL = process.env.POSTGRES_URL;
 
 const app = express();
 let redisConnected = false;
@@ -44,6 +43,12 @@ app.get("/", (req, res) => {
     message: "Everything seems fine here!",
     redis: redisConnected,
     postgres: postgresConnected,
+  });
+});
+
+app.get("/health", (req, res) => {
+  return res.json({
+    healthy: "true",
   });
 });
 
