@@ -41,7 +41,7 @@ async function connectDatabases() {
 
 app.get("/", (req, res) => {
   return res.json({
-    message: "Everything seems fine!",
+    message: "Everything seems fine here!",
     redis: redisConnected,
     postgres: postgresConnected,
   });
